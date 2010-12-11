@@ -18,8 +18,8 @@ function game() {
             ship.update(input);
             ship.draw(display);
         }
-        //window.setInterval(loop, 40);
-        window.setTimeout(loop, 0);
+        window.setInterval(loop, 40);
+        //window.setTimeout(loop, 0);
     }
 }
 

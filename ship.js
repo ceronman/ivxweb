@@ -1,6 +1,10 @@
-
-
 function Ship() {
+    this.loadFrames();
+};
+
+Ship.prototype = new Sprite();
+
+Ship.prototype.loadFrames = function () {
     var i, frame;
     this.frames = [];
 
@@ -9,9 +13,7 @@ function Ship() {
         this.frames.push(frame);
     }
     this.frame = this.frames[0];
-};
-
-Ship.prototype = new Sprite();
+}
 
 Ship.prototype.init = function (display) {
     this.position.x = display.width/2;
