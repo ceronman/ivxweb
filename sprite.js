@@ -13,15 +13,6 @@ function Sprite() {
     this.position = new Position();
 };
 
-Sprite.prototype.loadFrame = function (src) {
-    var frame = new Image();
-    frame.onload = function () {
-        console.log("frame loaded: " + frame.src);
-    };
-    frame.src = src;
-    return frame;
-}
-
 Sprite.prototype.draw = function (display) {
     var x = this.position.x - this.frame.width/2;
     var y = this.position.y - this.frame.height/2;

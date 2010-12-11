@@ -5,7 +5,7 @@ function Ship() {
     this.frames = [];
 
     for (i=1; i<=7; i++) {
-        frame = this.loadFrame("images/ship" + i + ".png");
+        frame = Loader.loadImage("images/ship" + i + ".png");
         this.frames.push(frame);
     }
     this.frame = this.frames[0];

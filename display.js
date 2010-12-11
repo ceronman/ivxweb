@@ -66,3 +66,34 @@ function Input(event) {
         that.keys[event.keyCode] = false;
     };
 };
+
+
+Loader = {
+    awaiting: 0,
+    loaded: 0,
+
+    reset: function () {
+        this.awaiting = 0;
+        this.loaded = 0;
+    },
+
+    onload: function () {
+    },
+
+    loadImage: function (src) {
+        var image, that;
+        this.awaiting += 1;
+        image = new Image();
+        that = this;
+        image.onload = function () {
+            console.log("image loaded: " + src)
+            that.loaded += 1;
+            if (that.loaded === that.awaiting) {
+                console.log("everything loaded");
+                that.onload();
+            };
+        };
+        image.src = src;
+        return image;
+    }
+};
