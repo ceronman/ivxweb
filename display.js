@@ -29,7 +29,7 @@ PixelData.prototype.putPixel = function (x, y, color) {
 
 function Display(canvasId) {
     this.canvas = document.getElementById(canvasId);
-    this.canvas.style["background-color"] = "rgb(0,0,0)";
+    this.canvas.style.backgroundColor = "black";
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.context = this.canvas.getContext("2d");
@@ -47,4 +47,22 @@ Display.prototype.getPixelData = function () {
 
 Display.prototype.putPixelData = function (pixelData) {
     this.context.putImageData(pixelData.imageData, 0, 0);
+};
+
+var KEYS = {
+    LEFT: 37,
+    RIGHT: 39,
+};
+
+function Input(event) {
+    var that = this;
+    this.keys = {};
+
+    document.onkeydown = function (event){
+        that.keys[event.keyCode] = true;
+    };
+
+    document.onkeyup = function (event) {
+        that.keys[event.keyCode] = false;
+    };
 };
