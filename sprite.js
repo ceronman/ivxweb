@@ -1,12 +1,12 @@
 function Position() {
     this.x = 0;
     this.y = 0;
-}
+};
 
 Position.prototype.moveTo = function (x, y) {
     this.x = x;
     this.y = y;
-}
+};
 
 
 function Sprite() {
