@@ -1,25 +1,30 @@
 function Ship() {
-    this.MAX_SPEED = 10;
-    this.MAX_FRAME_OFFSET = 3;
     this.speed = 0;
-    this.loadFrames();
+    this.frameOffset = 0;
 };
 
 Ship.prototype = new Sprite();
 
-Ship.prototype.loadFrames = function () {
-    var i, frame;
-    this.frames = [];
-
-    for (i=1; i<=7; i++) {
-        frame = Loader.loadImage("images/ship" + i + ".png");
-        this.frames.push(frame);
-    }
-    this.frameOffset = 0;
-    this.updateFrame();
-}
+Ship.prototype.frames = [
+    Loader.addImage("images/ship-left-max.png"),
+    Loader.addImage("images/ship-left-mid.png"),
+    Loader.addImage("images/ship-left-min.png"),
+    Loader.addImage("images/ship-center.png"),
+    Loader.addImage("images/ship-right-min.png"),
+    Loader.addImage("images/ship-right-mid.png"),
+    Loader.addImage("images/ship-right-max.png"),
+];
 
 Ship.prototype.init = function (display) {
+    this.MAX_SPEED = 10;
+    this.MAX_FRAME_OFFSET = 3;
+    this.CENTER_FRAME = 3;
+
+    this.updateFrame();
+
+    this.MIN_X = this.frame.width/2;
+    this.MAX_X = display.width - this.frame.width/2;
+
     this.position.x = display.width/2;
     this.position.y = display.height - this.frame.height/2;
 };
@@ -45,12 +50,12 @@ Ship.prototype.update = function (input) {
     }
 
     this.position.x += this.speed;
-    this.position.x = Math.max(this.position.x, 0);
-    this.position.x = Math.min(this.position.x, 320);
+    this.position.x = Math.max(this.position.x, this.MIN_X);
+    this.position.x = Math.min(this.position.x, this.MAX_X);
 
     this.updateFrame();
 };
 
 Ship.prototype.updateFrame = function () {
-    this.frame = this.frames[3 + this.frameOffset];
+    this.frame = this.frames[this.CENTER_FRAME + this.frameOffset];
 }

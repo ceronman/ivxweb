@@ -21,6 +21,7 @@ function game() {
         window.setInterval(loop, 40);
         //window.setTimeout(loop, 0);
     }
+    Loader.load();
 }
 
 window.onload = game

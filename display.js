@@ -69,31 +69,57 @@ function Input(event) {
 
 
 Loader = {
-    awaiting: 0,
-    loaded: 0,
+    imagesMap: {},
 
-    reset: function () {
-        this.awaiting = 0;
-        this.loaded = 0;
+    sources: function () {
+        return Object.keys(this.imagesMap);
+    },
+
+    images: function () {
+        var that = this;
+        return this.sources().map(function (src) {
+            return that.imagesMap[src];
+        });
     },
 
     onload: function () {
+        console.log("empty onload");
     },
 
-    loadImage: function (src) {
-        var image, that;
+    addImage: function (src) {
+        var image;
         this.awaiting += 1;
         image = new Image();
-        that = this;
-        image.onload = function () {
-            console.log("image loaded: " + src)
-            that.loaded += 1;
-            if (that.loaded === that.awaiting) {
-                console.log("everything loaded");
-                that.onload();
-            };
-        };
-        image.src = src;
+        image.loaded = false;
+        this.imagesMap[src] = image;
         return image;
-    }
+    },
+
+    checkLoad: function () {
+        var loaded = this.images().every(function (image) {
+            return image.loaded;
+        });
+
+        if (loaded) {
+            this.onload();
+        }
+    },
+
+    load: function () {
+        var images, src, that=this;
+
+        function loadImage(src) {
+            var image = that.imagesMap[src];
+            image.src = src;
+            image.onload = function () {
+                console.log("loaded " + src);
+                image.loaded = true;
+                that.checkLoad();
+            };
+        }
+
+        this.sources().forEach(function (source) {
+            loadImage(source)
+        });
+    },
 };
