@@ -1,9 +1,12 @@
-function Ship() {
+function Ship(group, bulletGroup) {
+    Sprite.apply(this, [[group]]);
+
+    this.bulletGroup = bulletGroup;
     this.speed = 0;
     this.frameOffset = 0;
+    this.weaponClass = Missile;
 };
-
-Ship.prototype = new Sprite();
+inherit(Ship, Sprite);
 
 Ship.prototype.frames = [
     Loader.addImage("images/ship-left-max.png"),
@@ -22,11 +25,11 @@ Ship.prototype.init = function (display) {
 
     this.updateFrame();
 
-    this.MIN_X = this.frame.width/2;
-    this.MAX_X = display.width - this.frame.width/2;
+    this.MIN_X = 0;
+    this.MAX_X = display.width - this.frame.width;
 
-    this.position.x = display.width/2;
-    this.position.y = display.height - this.frame.height/2;
+    this.position.x = display.width/2 - this.frame.width/2;
+    this.position.y = display.height - this.frame.height;
 };
 
 Ship.prototype.update = function (input) {
@@ -44,6 +47,10 @@ Ship.prototype.update = function (input) {
         accelerated = true;
     }
 
+    if (input.keys[KEYS.SPACE]) {
+        this.shoot();
+    }
+
     if (!accelerated) {
        this.speed += Math.sign(this.speed) * -1;
        this.frameOffset += Math.sign(this.frameOffset) * -1;
@@ -58,4 +65,35 @@ Ship.prototype.update = function (input) {
 
 Ship.prototype.updateFrame = function () {
     this.frame = this.frames[this.CENTER_FRAME + this.frameOffset];
-}
+};
+
+Ship.prototype.shoot = function () {
+    var bullet, pos = this.position;
+    if (this.bulletGroup.empty()) {
+        bullet = new Missile(this);
+    }
+};
+
+function Missile(ship) {
+    Sprite.apply(this, [[ship.bulletGroup]]);
+
+    this.speed = -3;
+    this.acceleration = 0.5;
+    Missile.side = Missile.side ? Missile.side * -1: 12;
+
+    var position = ship.getCenter();
+    position.x += Missile.side;
+    this.setCenter(position.x, position.y);
+};
+inherit(Missile, Sprite);
+
+Missile.prototype.frame = Loader.addImage("images/missile.png");
+
+Missile.prototype.update = function (input) {
+    this.position.y -= this.speed;
+    this.speed += this.acceleration;
+
+    if (this.position.y < 0) {
+        this.kill();
+    }
+};

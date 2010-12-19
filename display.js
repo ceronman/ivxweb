@@ -52,6 +52,7 @@ Display.prototype.putPixelData = function (pixelData) {
 var KEYS = {
     LEFT: 37,
     RIGHT: 39,
+    SPACE: 32,
 };
 
 function Input(event) {
@@ -59,6 +60,7 @@ function Input(event) {
     this.keys = {};
 
     document.onkeydown = function (event){
+        console.log("keydown: " + event.keyCode)
         that.keys[event.keyCode] = true;
     };
 

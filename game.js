@@ -4,8 +4,10 @@ function game() {
     input = new Input();
 
     var starField = new StarField(display.width, display.height);
+    var shipGroup = new SpriteGroup();
+    var bulletGroup = new SpriteGroup();
 
-    var ship = new Ship();
+    var ship = new Ship(shipGroup, bulletGroup);
 
     Loader.onload = function () {
         console.log("init");
@@ -15,8 +17,11 @@ function game() {
         function loop() {
             starField.scroll();
             starField.draw(display);
-            ship.update(input);
-            ship.draw(display);
+            bulletGroup.update(input);
+            shipGroup.update(input);
+
+            bulletGroup.draw(display);
+            shipGroup.draw(display);
         }
         window.setInterval(loop, 40);
         //window.setTimeout(loop, 0);
