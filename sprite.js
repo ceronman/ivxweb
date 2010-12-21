@@ -39,7 +39,6 @@ function SpriteGroup() {
 };
 
 SpriteGroup.prototype.add = function (sprite) {
-    console.log("adding " + sprite);
     this.sprites.push(sprite);
 };
 

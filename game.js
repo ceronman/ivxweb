@@ -23,7 +23,7 @@ function game() {
             bulletGroup.draw(display);
             shipGroup.draw(display);
         }
-        window.setInterval(loop, 40);
+        window.setInterval(loop, 1000/35.0);
         //window.setTimeout(loop, 0);
     }
     Loader.load();

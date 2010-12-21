@@ -1,10 +1,10 @@
 function Ship(group, bulletGroup) {
-    Sprite.apply(this, [[group]]);
+    Sprite.call(this, [group]);
 
     this.bulletGroup = bulletGroup;
     this.speed = 0;
     this.frameOffset = 0;
-    this.weaponClass = Missile;
+    this.weapon = Missile;
 };
 inherit(Ship, Sprite);
 
@@ -19,7 +19,7 @@ Ship.prototype.frames = [
 ];
 
 Ship.prototype.init = function (display) {
-    this.MAX_SPEED = 10;
+    this.MAX_SPEED = 5;
     this.MAX_FRAME_OFFSET = 3;
     this.CENTER_FRAME = 3;
 
@@ -67,29 +67,25 @@ Ship.prototype.updateFrame = function () {
     this.frame = this.frames[this.CENTER_FRAME + this.frameOffset];
 };
 
+Ship.
+
 Ship.prototype.shoot = function () {
     var bullet, pos = this.position;
     if (this.bulletGroup.empty()) {
-        bullet = new Missile(this);
+        bullet = new this.weapon(this);
     }
 };
 
-function Missile(ship) {
-    Sprite.apply(this, [[ship.bulletGroup]]);
 
-    this.speed = -3;
-    this.acceleration = 0.5;
-    Missile.side = Missile.side ? Missile.side * -1: 12;
+function Bullet(ship) {
+    Sprite.call(this, [ship.bulletGroup]);
 
-    var position = ship.getCenter();
-    position.x += Missile.side;
-    this.setCenter(position.x, position.y);
+    var point = this.startPosition(ship.getCenter());
+    this.setCenter(point.x, point.y)
 };
-inherit(Missile, Sprite);
+inherit(Bullet, Sprite);
 
-Missile.prototype.frame = Loader.addImage("images/missile.png");
-
-Missile.prototype.update = function (input) {
+Bullet.prototype.update = function (input) {
     this.position.y -= this.speed;
     this.speed += this.acceleration;
 
@@ -97,3 +93,45 @@ Missile.prototype.update = function (input) {
         this.kill();
     }
 };
+
+
+function Missile(ship) {
+    Bullet.call(this, ship);
+
+    this.speed = -3;
+    this.acceleration = 0.5;
+};
+inherit(Missile, Bullet);
+
+Missile.prototype.frame = Loader.addImage("images/missile.png");
+
+Missile.prototype.startPosition = function (shipPosition) {
+    Missile.side = Missile.side ? Missile.side * -1: 12;
+    return {
+        x: shipPosition.x + Missile.side,
+        y: shipPosition.y
+    };
+};
+
+
+function Laser(ship) {
+    Bullet.call(this, ship);
+    this.speed = 10;
+    this.acceleration = 0;
+}
+inherit(Laser, Bullet);
+
+Laser.prototype.frame = Loader.addImage("images/laser.png");
+
+Laser.prototype.startPosition = function (shipPosition) {
+    return shipPosition;
+};
+
+
+function Fireball(ship) {
+    Laser.call(this, ship);
+    this.speed = 1;
+};
+inherit(Fireball, Laser);
+
+Fireball.prototype.frame = Loader.addImage("images/fireball.png");
