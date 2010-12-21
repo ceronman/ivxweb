@@ -50,9 +50,10 @@ SpriteGroup.prototype.draw = function (surface) {
     });
 };
 
-SpriteGroup.prototype.update = function (input) {
+SpriteGroup.prototype.update = function () {
+    var args = arguments;
     this.sprites.forEach(function (sprite) {
-        sprite.update(input);
+        sprite.update.apply(sprite, args);
     });
 };
 
