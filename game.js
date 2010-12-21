@@ -25,7 +25,7 @@ function game() {
         }
         window.setInterval(loop, 1000/35.0);
         //window.setTimeout(loop, 0);
-    }
+    };
     Loader.load();
 }
 

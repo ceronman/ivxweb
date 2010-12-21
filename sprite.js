@@ -22,18 +22,6 @@ Sprite.prototype.alive = function () {
     });
 };
 
-Sprite.prototype.getCenter = function () {
-    return {
-        x: this.position.x + this.frame.width/2,
-        y: this.position.y + this.frame.height/2
-    };
-};
-
-Sprite.prototype.setCenter = function (x, y) {
-    this.position.x = x - this.frame.width/2;
-    this.position.y = y - this.frame.height/2;
-};
-
 function SpriteGroup() {
     this.sprites = [];
 };
@@ -45,19 +33,20 @@ SpriteGroup.prototype.add = function (sprite) {
 SpriteGroup.prototype.remove = function (sprite) {
     var index = this.sprites.indexOf(sprite);
     if (index >= 0) {
-       this.sprites.splice(index, 1);
+        this.sprites.splice(index, 1);
     };
 };
 
 SpriteGroup.prototype.empty = function () {
-    return (this.sprites.length == 0);
+    return (this.sprites.length === 0);
 };
 
 SpriteGroup.prototype.draw = function (surface) {
-    var pos;
+    var x, y;
     this.sprites.forEach(function (sprite) {
-        pos = sprite.position;
-        display.context.drawImage(sprite.frame, pos.x, pos.y);
+        x = sprite.position.x - sprite.frame.width/2;
+        y = sprite.position.y - sprite.frame.height/2;
+        display.context.drawImage(sprite.frame, x, y);
     });
 };
 

@@ -59,7 +59,7 @@ function Input(event) {
     var that = this;
     this.keys = {};
 
-    document.onkeydown = function (event){
+    document.onkeydown = function (event) {
         //console.log("keydown: " + event.keyCode)
         that.keys[event.keyCode] = true;
     };
@@ -121,7 +121,7 @@ Loader = {
         }
 
         this.sources().forEach(function (source) {
-            loadImage(source)
+            loadImage(source);
         });
     },
 };
