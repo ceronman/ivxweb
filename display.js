@@ -53,6 +53,7 @@ var KEYS = {
     LEFT: 37,
     RIGHT: 39,
     SPACE: 32,
+    DELETE: 46,
 };
 
 function Input(event) {
@@ -60,7 +61,7 @@ function Input(event) {
     this.keys = {};
 
     document.onkeydown = function (event) {
-        //console.log("keydown: " + event.keyCode)
+        console.log("keydown: " + event.keyCode);
         that.keys[event.keyCode] = true;
     };
 
@@ -70,7 +71,7 @@ function Input(event) {
 };
 
 
-Loader = {
+var Loader = {
     imagesMap: {},
 
     sources: function () {

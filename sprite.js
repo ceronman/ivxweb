@@ -46,7 +46,7 @@ SpriteGroup.prototype.draw = function (surface) {
     this.sprites.forEach(function (sprite) {
         x = sprite.position.x - sprite.frame.width/2;
         y = sprite.position.y - sprite.frame.height/2;
-        display.context.drawImage(sprite.frame, x, y);
+        surface.context.drawImage(sprite.frame, x, y);
     });
 };
 

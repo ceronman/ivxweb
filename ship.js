@@ -1,3 +1,85 @@
+function Bullet(ship) {
+    Sprite.call(this, [ship.bulletGroup]);
+    this.acceleration = 0;
+    this.speed = 0;
+    this.position.x = ship.position.x;
+    this.position.y = ship.position.y;
+};
+inherit(Bullet, Sprite);
+
+Bullet.prototype.update = function (input) {
+    this.position.y -= this.speed;
+    this.speed += this.acceleration;
+
+    if (this.position.y < 0) {
+        this.kill();
+    }
+};
+
+
+function Missile(ship) {
+    Bullet.call(this, ship);
+
+    Missile.side = Missile.side ? Missile.side * -1: 12;
+    this.position.x = ship.position.x + Missile.side;
+
+    this.speed = -3;
+    this.acceleration = 0.5;
+};
+inherit(Missile, Bullet);
+
+Missile.prototype.frame = Loader.addImage("images/missile.png");
+
+
+function Laser(ship) {
+    Bullet.call(this, ship);
+    this.speed = 10;
+}
+inherit(Laser, Bullet);
+
+Laser.prototype.frame = Loader.addImage("images/laser.png");
+
+
+function Fireball(ship) {
+    Bullet.call(this, ship);
+    this.speed = 1;
+};
+inherit(Fireball, Bullet);
+
+Fireball.prototype.frame = Loader.addImage("images/fireball.png");
+
+
+function Explosion() {
+    this.MAX_FRAME = 6;
+    this.frameIndex = 0;
+    this.end = false;
+    this.updateFrame();
+};
+
+
+Explosion.prototype.frames = [
+    Loader.addImage("images/explosion1.png"),
+    Loader.addImage("images/explosion2.png"),
+    Loader.addImage("images/explosion3.png"),
+    Loader.addImage("images/explosion4.png"),
+    Loader.addImage("images/explosion5.png"),
+    Loader.addImage("images/explosion6.png"),
+    Loader.addImage("images/explosion7.png"),
+];
+
+Explosion.prototype.update = function () {
+    this.updateFrame();
+    this.frameIndex += 0.5;
+    if (this.frameIndex > this.MAX_FRAME) {
+        this.end = true;
+    }
+};
+
+Explosion.prototype.updateFrame = function () {
+    this.frame = this.frames[Math.floor(this.frameIndex)];
+};
+
+
 function Ship(group, bulletGroup) {
     Sprite.call(this, [group]);
 
@@ -59,7 +141,10 @@ Ship.prototype.update = function (input) {
 
     if (input.keys[KEYS.SPACE]) {
         this.shoot();
-        //this.explode();
+    }
+
+    if (input.keys[KEYS.DELETE]) {
+        this.explode();
     }
 
     if (!accelerated) {
@@ -83,85 +168,4 @@ Ship.prototype.shoot = function () {
 
 Ship.prototype.explode = function () {
     this.explosion = new Explosion();
-};
-
-
-function Bullet(ship) {
-    Sprite.call(this, [ship.bulletGroup]);
-    this.acceleration = 0;
-    this.speed = 0;
-    this.position.x = ship.position.x;
-    this.position.y = ship.position.y;
-};
-inherit(Bullet, Sprite);
-
-Bullet.prototype.update = function (input) {
-    this.position.y -= this.speed;
-    this.speed += this.acceleration;
-
-    if (this.position.y < 0) {
-        this.kill();
-    }
-};
-
-
-function Missile(ship) {
-    Bullet.call(this, ship);
-
-    Missile.side = Missile.side ? Missile.side * -1: 12;
-    this.position.x = ship.position.x + Missile.side;
-
-    this.speed = -3;
-    this.acceleration = 0.5;
-};
-inherit(Missile, Bullet);
-
-Missile.prototype.frame = Loader.addImage("images/missile.png");
-
-
-function Laser(ship) {
-    Bullet.call(this, ship);
-    this.speed = 10;
-}
-inherit(Laser, Bullet);
-
-Laser.prototype.frame = Loader.addImage("images/laser.png");
-
-
-function Fireball(ship) {
-    Bullet.call(this, ship);
-    this.speed = 1;
-};
-inherit(Fireball, Bullet);
-
-Fireball.prototype.frame = Loader.addImage("images/fireball.png");
-
-
-function Explosion() {
-    this.MAX_FRAME = 6;
-    this.frameIndex = 0;
-    this.end = false;
-    this.updateFrame();
-};
-
-Explosion.prototype.frames = [
-    Loader.addImage("images/explosion1.png"),
-    Loader.addImage("images/explosion2.png"),
-    Loader.addImage("images/explosion3.png"),
-    Loader.addImage("images/explosion4.png"),
-    Loader.addImage("images/explosion5.png"),
-    Loader.addImage("images/explosion6.png"),
-    Loader.addImage("images/explosion7.png"),
-];
-
-Explosion.prototype.update = function () {
-    this.updateFrame();
-    this.frameIndex += 0.5;
-    if (this.frameIndex > this.MAX_FRAME) {
-        this.end = true;
-    }
-};
-
-Explosion.prototype.updateFrame = function () {
-    this.frame = this.frames[Math.floor(this.frameIndex)];
 };

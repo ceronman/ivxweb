@@ -29,4 +29,4 @@ function game() {
     Loader.load();
 }
 
-window.onload = game
+window.onload = game;
