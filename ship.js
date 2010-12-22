@@ -49,13 +49,15 @@ inherit(Fireball, Bullet);
 Fireball.prototype.frame = Loader.addImage("images/fireball.png");
 
 
-function Explosion() {
-    this.MAX_FRAME = 6;
-    this.frameIndex = 0;
-    this.end = false;
-    this.updateFrame();
-};
+function Explosion(group, x, y) {
+    Sprite.call(this, [group]);
 
+    this.SPEED = 0.5;
+    this.position.x = x;
+    this.position.y = y;
+    this.frameIndex = 0;
+};
+inherit(Explosion, Sprite);
 
 Explosion.prototype.frames = [
     Loader.addImage("images/explosion1.png"),
@@ -68,16 +70,12 @@ Explosion.prototype.frames = [
 ];
 
 Explosion.prototype.update = function () {
-    this.updateFrame();
-    this.frameIndex += 0.5;
-    if (this.frameIndex > this.MAX_FRAME) {
-        this.end = true;
+    this.frameIndex += this.SPEED;
+    if (this.frameIndex >= this.frames.length-1) {
+        this.kill();
     }
-};
-
-Explosion.prototype.updateFrame = function () {
     this.frame = this.frames[Math.floor(this.frameIndex)];
-};
+}
 
 
 function Ship(group, bulletGroup) {
@@ -117,16 +115,6 @@ Ship.prototype.init = function (display) {
 Ship.prototype.update = function (input) {
     var accelerated = false;
 
-    if (this.explosion) {
-        this.frame = this.explosion.frame;
-        this.explosion.update();
-
-        if (this.explosion.end) {
-            delete this.explosion;
-        }
-        return;
-    }
-
     if (input.keys[KEYS.RIGHT]) {
         this.speed = Math.min(this.speed+1, this.MAX_SPEED);
         this.frameOffset = Math.min(this.frameOffset+1, this.MAX_OFFSET);
@@ -141,10 +129,6 @@ Ship.prototype.update = function (input) {
 
     if (input.keys[KEYS.SPACE]) {
         this.shoot();
-    }
-
-    if (input.keys[KEYS.DELETE]) {
-        this.explode();
     }
 
     if (!accelerated) {
@@ -164,8 +148,4 @@ Ship.prototype.shoot = function () {
     if (this.bulletGroup.empty()) {
         bullet = new this.weapon(this);
     }
-};
-
-Ship.prototype.explode = function () {
-    this.explosion = new Explosion();
 };

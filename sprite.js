@@ -17,7 +17,7 @@ Sprite.prototype.kill = function () {
 };
 
 Sprite.prototype.alive = function () {
-    this.groups.some(function (group) {
+    return this.groups.some(function (group) {
         return group;
     });
 };
