@@ -1,7 +1,6 @@
 function game() {
-
-    display = new Display("gamecanvas");
-    input = new Input();
+    var display = new Display("gamecanvas");
+    var input = new Input();
 
     var starField = new StarField(display.width, display.height);
     var shipGroup = new SpriteGroup();
@@ -20,21 +19,27 @@ function game() {
     Loader.onload = function () {
         console.log("init");
         ship.init(display);
-        starField.createStars();
 
         function loop() {
-
             if (input.keys[KEYS.DELETE] && ship.alive()) {
                 pos = ship.position;
                 explosion = new Explosion(explosionGroup, pos.x, pos.y);
                 ship.kill();
             }
 
-            starField.scroll();
+            onCollision = function (enemy, bullet) {
+                var pos = enemy.position;
+                explosion = new Explosion(explosionGroup, pos.x, pos.y);
+                enemy.kill();
+                bullet.impact();
+            };
+            SpriteGroup.collision(enemyGroup, bulletGroup, onCollision);
+
+            starField.update();
             bulletGroup.update(input);
             shipGroup.update(input);
             enemyGroup.update();
-            explosionGroup.update();
+            explosionGroup.update(null, true);
 
             starField.draw(display);
             bulletGroup.draw(display);

@@ -61,7 +61,7 @@ function Input(event) {
     this.keys = {};
 
     document.onkeydown = function (event) {
-        console.log("keydown: " + event.keyCode);
+        //console.log("keydown: " + event.keyCode);
         that.keys[event.keyCode] = true;
     };
 

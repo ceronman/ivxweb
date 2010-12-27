@@ -16,6 +16,10 @@ Bullet.prototype.update = function (input) {
     }
 };
 
+Bullet.prototype.impact = function () {
+    this.kill();
+};
+
 
 function Missile(ship) {
     Bullet.call(this, ship);
@@ -48,6 +52,8 @@ inherit(Fireball, Bullet);
 
 Fireball.prototype.frame = Loader.addImage("images/fireball.png");
 
+Fireball.prototype.impact = function () {
+};
 
 function Explosion(group, x, y) {
     Sprite.call(this, [group]);
@@ -71,7 +77,7 @@ Explosion.prototype.frames = [
 
 Explosion.prototype.update = function () {
     this.frameIndex += this.SPEED;
-    if (this.frameIndex >= this.frames.length-1) {
+    if (this.frameIndex > this.frames.length-1) {
         this.kill();
     }
     this.frame = this.frames[Math.floor(this.frameIndex)];

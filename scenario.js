@@ -45,30 +45,27 @@ StarFieldLayer.prototype.draw = function (pixels) {
 
 
 function StarField(w, h) {
-
     this.layers = [
         new StarFieldLayer(w, h, 50, new Color(255, 255, 255, 255), 4),
         new StarFieldLayer(w, h, 50, new Color(200, 200, 200, 255), 2),
         new StarFieldLayer(w, h, 50, new Color(100, 100, 100, 255), 1)
     ];
-};
 
-StarField.prototype.createStars = function () {
-    for (var i=0; i<this.layers.length; i++) {
-        this.layers[i].createRandomStars();
-    }
+    this.layers.forEach(function (layer) {
+        layer.createRandomStars();
+    });
 };
 
 StarField.prototype.draw = function (display) {
     var pixels = display.createPixelData();
-    for (var i=0; i<this.layers.length; i++) {
-        this.layers[i].draw(pixels);
-    }
+    this.layers.forEach(function (layer) {
+        layer.draw(pixels);
+    });
     display.putPixelData(pixels);
 };
 
-StarField.prototype.scroll = function () {
-    for (var i=0; i<this.layers.length; i++) {
-        this.layers[i].scroll();
-    }
+StarField.prototype.update = function () {
+    this.layers.forEach(function (layer) {
+        layer.scroll();
+    });
 };
